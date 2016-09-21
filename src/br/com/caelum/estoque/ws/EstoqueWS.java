@@ -3,6 +3,7 @@ package br.com.caelum.estoque.ws;
 import java.util.List;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.ws.RequestWrapper;
@@ -11,6 +12,10 @@ import javax.xml.ws.ResponseWrapper;
 import br.com.caelum.estoque.modelo.item.Filtros;
 import br.com.caelum.estoque.modelo.item.Item;
 import br.com.caelum.estoque.modelo.item.ItemDao;
+import br.com.caelum.estoque.modelo.item.ItemValidador;
+import br.com.caelum.estoque.modelo.usuario.AutorizationException;
+import br.com.caelum.estoque.modelo.usuario.TokenDao;
+import br.com.caelum.estoque.modelo.usuario.TokenUsuario;
 
 /**
  * @author Ramon Vieira
@@ -44,6 +49,23 @@ public class EstoqueWS {
 	@WebMethod(exclude=true)
 	public void otherMethod(){
 		System.out.println("Method que não está no wsdl");
+	}
+	
+	@WebMethod(operationName="CadastrarItem")
+	public Item cadastrarItem(
+		  @WebParam(name="item") Item item, 
+		  @WebParam(name="tokenUsuario", header=true) TokenUsuario tokenUsuario) 
+				  throws AutorizationException{
+	
+		itemDao.cadastrar(item);
+		
+		if(!new TokenDao().ehValido(tokenUsuario)){
+			throw new AutorizationException("Token Inválido");
+		}
+		
+		new ItemValidador(item).validate();
+		
+		return item;
 	}
 	
 }
