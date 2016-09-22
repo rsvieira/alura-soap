@@ -11,7 +11,7 @@ public class PublicaEstoqueWS {
 
 	public static void main(String[] args) {
 
-		String url = "http://localhost:8080/estoquews?wdsl";
+		String url = "http://localhost:8080/estoquews?wsdl";
 		EstoqueWS estoqueWS = new EstoqueWS();
 		
 		Endpoint.publish(url, estoqueWS);
