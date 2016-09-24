@@ -7,6 +7,10 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.ParameterStyle;
+import javax.jws.soap.SOAPBinding.Style;
+import javax.jws.soap.SOAPBinding.Use;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -24,6 +28,7 @@ import br.com.caelum.estoque.modelo.usuario.TokenUsuario;
  */
 
 @WebService
+@SOAPBinding(style=Style.DOCUMENT, use=Use.LITERAL, parameterStyle=ParameterStyle.WRAPPED)
 public class EstoqueWS {
 
 	private ItemDao itemDao = new ItemDao();
@@ -52,7 +57,7 @@ public class EstoqueWS {
 		System.out.println("Method que não está no wsdl");
 	}
 	
-	@WebMethod(operationName="CadastrarItem")
+	@WebMethod(action="CadastrarItem",operationName="CadastrarItem")
 	public Item cadastrarItem(
 		  @WebParam(name="item") Item item, 
 		  @WebParam(name="tokenUsuario", header=true) TokenUsuario tokenUsuario) 
